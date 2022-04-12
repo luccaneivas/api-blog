@@ -5,6 +5,16 @@ const Schema = Joi.object({
   name: Joi.string().required(),
 });
 
+const getAll = async () => {
+  try {
+    const categories = await Category.findAll();
+
+    return categories;
+  } catch (error) {
+    return error;
+  }
+};
+
 const create = async ({ name }) => {
   try {
     const { error } = Schema.validate({ name });
@@ -25,5 +35,6 @@ const create = async ({ name }) => {
 };
 
 module.exports = {
+  getAll,
   create,
 };
