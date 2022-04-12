@@ -8,7 +8,6 @@ const Attributes = {
     type: DataTypes.INTEGER,
   },
   displayName: {
-    allowNull: false,
     type: DataTypes.STRING,
   },
   email: {
