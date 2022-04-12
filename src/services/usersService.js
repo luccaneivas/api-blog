@@ -14,6 +14,14 @@ const getAll = async () => {
   return result;
 };
 
+const getById = async (id) => {
+  const user = await User.findOne({ where: { id } }, { attributes: { exclude: ['password'] } });
+
+  if (!user) return { error: { status: 'notFound', message: 'User does not exist' } };
+
+  return user;
+};
+
 const create = async ({ displayName, email, password, image }) => {
   try {
     const { error } = Schema.validate({ displayName, email, password });
@@ -35,5 +43,6 @@ const create = async ({ displayName, email, password, image }) => {
 
 module.exports = {
   getAll,
+  getById,
   create,
 };

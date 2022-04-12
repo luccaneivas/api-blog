@@ -4,7 +4,7 @@ const Auth = require('../middlewares/authentication');
 
 user.get('/', Auth, UsersController.getAll);
 
-user.get('/:id', () => {});
+user.get('/:id', Auth, UsersController.getById);
 
 user.post('/', UsersController.create);
 

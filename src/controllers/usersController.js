@@ -10,6 +10,20 @@ const getAll = async (_req, res, next) => {
   }
 };
 
+const getById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const response = await UsersService.getById(id);
+
+    if (response.error) return next(response.error);
+
+    res.status(200).json(response);
+  } catch (error) {
+    return next({ status: 'unexpected', message: error.message });
+  }
+};
+
 const create = async (req, res, next) => {
   try {
     const response = await UsersService.create(req.body);
@@ -24,5 +38,6 @@ const create = async (req, res, next) => {
 
 module.exports = {
   getAll,
+  getById,
   create,
 };
