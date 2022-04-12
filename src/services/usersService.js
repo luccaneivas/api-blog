@@ -8,6 +8,12 @@ const Schema = Joi.object({
   password: Joi.string().length(6).required(),
 });
 
+const getAll = async () => {
+  const result = await User.findAll({ attributes: { exclude: ['password'] } });
+
+  return result;
+};
+
 const create = async ({ displayName, email, password, image }) => {
   try {
     const { error } = Schema.validate({ displayName, email, password });
@@ -28,5 +34,6 @@ const create = async ({ displayName, email, password, image }) => {
 };
 
 module.exports = {
+  getAll,
   create,
 };
