@@ -15,6 +15,12 @@ const getAll = async () => {
   }
 };
 
+const getById = async (id) => {
+  const category = await Category.findOne({ where: { id } });
+
+  return category;
+};
+
 const create = async ({ name }) => {
   try {
     const { error } = Schema.validate({ name });
@@ -37,4 +43,5 @@ const create = async ({ name }) => {
 module.exports = {
   getAll,
   create,
+  getById,
 };
