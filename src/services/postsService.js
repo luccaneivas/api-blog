@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const { sequelize } = require('../models');
 
-const { BlogPost, PostCategory } = require('../models');
-const Category = require('./categoriesService');
+const { BlogPost, PostCategory, Category, User } = require('../models');
+const CategoryService = require('./categoriesService');
 
 const Schema = Joi.object({
   title: Joi.string().required(),
@@ -11,7 +11,7 @@ const Schema = Joi.object({
 });
 
 const categoryExist = async (ids) => {
-  const idsPromises = ids.map((id) => Category.getById(id));
+  const idsPromises = ids.map((id) => CategoryService.getById(id));
 
   const categorys = await Promise.all(idsPromises);
 
@@ -42,6 +42,19 @@ const create = async ({ title, content, categoryIds, userId }) => {
     content: result.content };
 };
 
+const getAll = async () => {
+  const posts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password', 'blogId'] } },
+      { model: Category, as: 'categories', attributes: ['id', 'name'] },
+    ],
+    attributes: { exclude: ['blogId'] },
+  });
+
+  return posts;
+};
+
 module.exports = {
   create,
+  getAll,
 };

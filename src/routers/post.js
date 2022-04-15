@@ -3,7 +3,7 @@ const posts = require('express').Router();
 const PostsController = require('../controllers/postsController');
 const Auth = require('../middlewares/authentication');
 
-posts.get('/', () => {});
+posts.get('/', Auth, PostsController.getAll);
 
 posts.get('/:id', () => {});
 
