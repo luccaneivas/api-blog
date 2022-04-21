@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const { sequelize } = require('../models');
 
-const { BlogPost, PostCategory, Category, User } = require('../models');
+const { BlogPost, PostCategory } = require('../models');
 const CategoryService = require('./categoriesService');
 
 const Schema = Joi.object({
@@ -45,10 +45,9 @@ const create = async ({ title, content, categoryIds, userId }) => {
 const getAll = async () => {
   const posts = await BlogPost.findAll({
     include: [
-      { model: User, as: 'user', attributes: { exclude: ['password', 'blogId'] } },
-      { model: Category, as: 'categories', attributes: ['id', 'name'] },
+      { association: 'user', attributes: { exclude: ['password', 'blogId'] } },
+      { association: 'categories', through: { attributes: [] } },
     ],
-    attributes: { exclude: ['blogId'] },
   });
 
   return posts;

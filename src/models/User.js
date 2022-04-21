@@ -30,12 +30,12 @@ module.exports = (sequelize) => {
     { timestamps: false, tableName: 'Users' },
   );
 
-  User.associate = (models) => {
-    User.hasMany(
-      models.BlogPost,
-      { foreignKey: 'blogId', as: 'posts' },
-    );
-  };
+  // User.associate = (models) => {
+  //   User.hasMany(
+  //     models.BlogPost,
+  //     { foreignKey: 'blogId', as: 'posts' },
+  //   );
+  // };
 
   return User;
 };
