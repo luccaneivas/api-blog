@@ -5,7 +5,7 @@ const Auth = require('../middlewares/authentication');
 
 posts.get('/', Auth, PostsController.getAll);
 
-posts.get('/:id', () => {});
+posts.get('/:id', Auth, PostsController.getById);
 
 posts.get('/search', () => {});
 
