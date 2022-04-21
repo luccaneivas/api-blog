@@ -11,7 +11,7 @@ posts.get('/search', () => {});
 
 posts.post('/', Auth, PostsController.create);
 
-posts.put('/:id', () => {});
+posts.put('/:id', Auth, PostsController.update);
 
 posts.delete('/:id', () => {});
 

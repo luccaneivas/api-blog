@@ -4,7 +4,7 @@ const { sequelize } = require('../models');
 const { BlogPost, PostCategory } = require('../models');
 const CategoryService = require('./categoriesService');
 
-const Schema = Joi.object({
+const createSchema = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
   categoryIds: Joi.array().required(),
@@ -20,7 +20,7 @@ const categoryExist = async (ids) => {
 };
 
 const create = async ({ title, content, categoryIds, userId }) => {
-  const { error } = Schema.validate({ title, content, categoryIds });
+  const { error } = createSchema.validate({ title, content, categoryIds });
   if (error) return { error: { status: 'badRequest', message: error.message } };
 
   const verify = await categoryExist(categoryIds);
@@ -65,8 +65,31 @@ const getById = async (id) => {
   return post;
 };
 
+const updateSchema = Joi.object({
+  title: Joi.string().required(),
+  content: Joi.string().required(),
+});
+
+const update = async ({ id, title, content, userId }) => {
+  const { error } = updateSchema.validate({ title, content });
+  if (error) return { error: { status: 'badRequest', message: error.message } };
+
+  const post = await getById(id);
+
+  if (post.userId !== userId) {
+    return { error: { status: 'unauthorized', message: 'Unauthorized user' } };
+  }
+
+  await BlogPost.update({ title, content }, { where: { id } });
+
+  return {
+    title, content, userId, categories: post.categories,
+  };
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

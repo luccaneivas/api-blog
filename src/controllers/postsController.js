@@ -38,8 +38,31 @@ const getById = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const { userId } = req.user;
+
+    if (req.body.categoryIds) {
+      return next({ status: 'badRequest', message: 'Categories cannot be edited' });
+    }
+
+    const response = await PostsService.update({ id, title, content, userId });
+
+    if (!response) return next({ status: 'notFound', message: 'Post does not exist' });
+
+    if (response.error) return next(response.error);
+
+    res.status(200).json(response);
+  } catch (error) {
+    return next({ status: 'unexpected', message: error.message });
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
