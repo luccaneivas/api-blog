@@ -8,6 +8,6 @@ user.get('/:id', Auth, UsersController.getById);
 
 user.post('/', UsersController.create);
 
-user.delete('/me', () => {});
+user.delete('/me', Auth, UsersController.deleteUser);
 
 module.exports = user;
