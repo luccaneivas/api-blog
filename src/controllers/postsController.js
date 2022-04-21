@@ -60,9 +60,27 @@ const update = async (req, res, next) => {
   }
 };
 
+const deletePost = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.user;
+
+    const response = await PostsService.deletePost({ id, userId });
+
+    if (!response) return next({ status: 'notFound', message: 'Post does not exist' });
+
+    if (response.error) return next(response.error);
+
+    res.status(204).end();
+  } catch (error) {
+    return next({ status: 'unexpected', message: error.message });
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  deletePost,
 };

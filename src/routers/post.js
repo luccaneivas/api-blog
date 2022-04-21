@@ -13,6 +13,6 @@ posts.post('/', Auth, PostsController.create);
 
 posts.put('/:id', Auth, PostsController.update);
 
-posts.delete('/:id', () => {});
+posts.delete('/:id', Auth, PostsController.deletePost);
 
 module.exports = posts;
