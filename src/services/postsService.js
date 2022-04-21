@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { Op } = require('sequelize');
 const { sequelize } = require('../models');
 
 const { BlogPost, PostCategory } = require('../models');
@@ -107,10 +108,28 @@ const deletePost = async ({ id, userId }) => {
   return true;
 };
 
+const search = async (param) => {
+  const post = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.substring]: param } },
+        { content: { [Op.substring]: param } },
+      ],
+    },
+    include: [
+      { association: 'user', attributes: { exclude: ['password', 'blogId'] } },
+      { association: 'categories', through: { attributes: [] } },
+    ],
+  });
+
+  return post;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
   deletePost,
+  search,
 };
